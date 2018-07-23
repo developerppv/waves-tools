@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Issue Asset Sponsorship</title>
+    <script src="js/angular.min.js"></script>
+    <script src="js/jssha3.js"></script>
+    <script src="js/CryptoJS.js"></script>
+    <script src="js/sponsor.js"></script>
+    <script src="js/blake2b.js"></script>
+    <script src="js/base58.js"></script>
+    <script src="js/Curve25519.js"></script>
+    <script src="js/converters.js"></script>
+    <script src="js/cryptoService.js"></script>
+    <script src="js/signService.js"></script>
+    <script src="js/utilityService.js"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/apiwaves.js"></script>
+  </head>
+  <body ng-app='walletApp' ng-controller='walletCtrl'>
+    <h1>Issue Asset Sponsorship</h1>
+    <p>
+      <b>Purpose:</b> Issue sponsorship for custom asset fee.
+    </p>
+
+    <h2>Step 1: Enter Wallet Seed</h2>
+    <p>
+      <i>Don't worry, this information will NOT be stored on any server.</i><br>
+      <textarea ng-model="seed" ng-change="analyzeSeed()" placeholder="Please enter sender wallet seed here"></textarea>
+    </p>
+
+    <h3>Wallet Information</h3>
+    <p>
+      <b>Address:</b> {{sender.address}}
+    </p>
+
+    <h4>Available Balance</h4>
+    <p>
+      {{waves}} WAVES
+    </p>
+    <h4>Issued Assets</h4>
+    <table border="1">
+      <thead>
+          <tr ng-repeat="(key,value) in assetList" ng-if="$last">
+           <td ng-repeat="(key,v) in value">{{key}}</td>
+        </tr>
+      </thead>
+         <tr ng-repeat="(key,value) in assetList | orderBy: 'name'">
+           <td ng-repeat="(key,v) in value">{{v}}</td>
+        </tr>
+    </table>
+    <br>
+
+    <h2>Step 2: Issue Sponsorship</h2>
+    <form>
+      <div class="form-group row">
+        <label for="inputAssetId" class="col-sm-1 col-form-label">Select Asset:</label>
+        <div class="col-sm-1">
+          <select name="selectAssetId" ng-model="sponsorAssetId">
+            <option ng-repeat="a in assetList | orderBy: 'name'" value="{{a.assetid}}">{{a.name}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="inputSponsorFee" class="col-sm-1 col-form-label">Sponsor Fee:</label>
+        <div class="col-sm-1">
+          <input type="number" name="tnAssetFee" placeholder="amount in satoshi coin" ng-model="sponsorAssetFee" min="1">
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-10">
+          <p>Cost: 1 WAVES {{enoughWaves ? "[OK]" : "[Insufficient WAVES balance]"}}</p>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-1">
+          <button type="button" name="btSubmit" ng-click="submit()">Proceed</button>
+        </div>
+      </div>
+    </form>
+  </body>
+</html>

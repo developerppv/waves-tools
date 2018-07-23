@@ -1,0 +1,20 @@
+body{
+  padding: 10pt;
+}
+textarea {
+  width: 400px;
+  height: 100px;
+}
+thead{
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.footer{
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  position: fixed;
+  border-style: solid;
+  border-width: 1px;
+  text-align: center;
+}

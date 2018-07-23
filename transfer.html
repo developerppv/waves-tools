@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Transfer Coin</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/angular.min.js"></script>
+    <script src="js/jssha3.js"></script>
+    <script src="js/CryptoJS.js"></script>
+    <script src="js/transfercoin.js"></script>
+    <script src="js/blake2b.js"></script>
+    <script src="js/base58.js"></script>
+    <script src="js/Curve25519.js"></script>
+    <script src="js/converters.js"></script>
+    <script src="js/cryptoService.js"></script>
+    <script src="js/signService.js"></script>
+    <script src="js/utilityService.js"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/apiwaves.js"></script>
+  </head>
+  <body ng-app='walletApp' ng-controller='walletCtrl'>
+    <h1>Transfer Asset</h1>
+    <p>
+      <b>Purpose:</b> Transfer asset to recipient using custom asset as fee.
+    </p>
+
+    <h2>Step 1: Enter Wallet Seed</h2>
+    <p>
+      <i>Don't worry, this information will NOT be stored on any server.</i><br>
+      <textarea ng-model="seed" ng-change="analyzeSeed()" placeholder="Please enter sender wallet seed here"></textarea>
+    </p>
+
+    <h3>Wallet Information</h3>
+    <p>
+      <b>Address:</b> {{sender.address}}
+    </p>
+
+    <h3>Available Balance</h3>
+    <table border="1">
+      <thead>
+          <tr ng-repeat="(key,value) in sender.balanceList" ng-if="$last">
+           <td ng-repeat="(key,v) in value">{{key}}</td>
+        </tr>
+      </thead>
+         <tr ng-repeat="(key,value) in sender.balanceList | orderBy: 'name'">
+           <td ng-repeat="(key,v) in value">{{v}}</td>
+        </tr>
+    </table>
+    <br>
+
+    <h2>Step 2: Transfer Asset</h2>
+    <form>
+      <div class="form-group row">
+        <label for="inputRecipient" class="col-sm-1 col-form-label">Recipient:</label>
+        <div class="col-sm-1">
+          <input type="text" id="inputRecipient" placeholder="enter recipient address" ng-model="recipient" maxlength="35" style="width: 400px;">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="selectAsset" class="col-sm-1 col-form-label">Select Asset:</label>
+        <div class="col-sm-1">
+          <select name="selectAsset" ng-options="asset as asset.name for asset in sender.balanceList | orderBy: 'name'" ng-model="selectedAsset">
+          </select>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="inputAssetAmount" class="col-sm-1 col-form-label">Transfer Amount:</label>
+        <div class="col-sm-1">
+          <input type="number" id="inputAssetAmount" placeholder="amount in satoshi coin" ng-model="transferAmount">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="selectFee" class="col-sm-1 col-form-label">Select Fee:</label>
+        <div class="col-sm-1">
+          <select name="selectFee" ng-options="fee as fee.name for fee in sender.feeList | orderBy:'name'" ng-model="selectedFee" ng-change="setFeeAmount()">
+          </select>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="inputFeeAssetAmount" class="col-sm-1 col-form-label">Fee Amount:</label>
+        <div class="col-sm-1">
+          <input type="number" id="inputFeeAssetAmount" placeholder="amount in satoshi coin" ng-model="feeAmount">
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-1">
+          <button type="button" name="btSubmit" ng-click="transferCoin()">Proceed</button>
+        </div>
+      </div>
+    </form>
+  </body>
+</html>
