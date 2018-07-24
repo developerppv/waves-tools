@@ -6,7 +6,7 @@
 
     const TEST_NODE = 'https://testnode1.wavesnodes.com';
     const MAIN_NODE = 'https://nodes.wavesnodes.com'
-    const WAVES_NODE = TEST_NODE;
+    const WAVES_NODE = MAIN_NODE;
 
     //https://github.com/wavesplatform/Waves/wiki/Waves-Node-REST-API#get-transactionsinfoid
     var getTxInfo = function(txId) {
